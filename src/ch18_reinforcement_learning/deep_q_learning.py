@@ -114,3 +114,45 @@ for episode in range(600):
 # updating its policy,
 # it may learn new information in one part of the environment
 #  that destroys what it has already learnt in other parts of the environment
+
+'''
+    Variants:
+        1. fixed Q-valuie targets: to avoid loops, two DQNs are used
+            - online model: learns and moves the agent
+            - target model: sets the targets (this model is used to predict
+            the next states' Q-values); it's updated less frequently
+
+        2. Double DQN:
+            - normally models, because they choose the max of Q-values, over
+            estimate the Q- values
+            - here the best action for the next state is selected by the online
+            model
+            - the target model only estimates the Q-values for the best action
+
+        3. Importance Sampling (Prioritized Experience Replay):
+            - instead of uniform sampling from the replay buffer
+            - this focuses on important features
+            - important experience = which leads to fast learning progress
+            TD error: delta = r + gamma * V(s') - V(s)
+            if large, it indicates a surprising transition
+            this can be used to set priorities on the buffer
+            - when an experience is sampled, it's p = | delta | is computed
+            with a constant added
+            - this p is proportional to p^zeta, where zeta is a greediness
+            hyperparameter: 0 means uniform sampling, 1 full importance
+            - downweighting is needed to avoid overfitting important
+            experiences
+            w = (n P)^-Beta
+            n is the total number of experiences in the buffer
+            Beta is the hyperparameter to compensate sampling frequency bias
+
+        4. Dueling DQN:
+            a Q-value of an (s, a) pair can be written as:
+                Q(s,a) = V(s) + A(s, a)
+                V(s) is the value of state s
+                A(s, a) is the advantage of taking the action a in state s
+                over to all other possible actions
+                V(s) is equal to the Q-value of the best action a* for that state
+                V(s) = Q(s, a*) in which case A(s, a*) = 0
+
+'''
